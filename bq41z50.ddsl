@@ -1,0 +1,2253 @@
+// Optional compiler flag (disabled): --rust-defmt-feature=defmt-03
+device Device {
+    default-byte-order: LE,
+    register-address-type: u8,
+    command-address-type: u32,
+    buffer-address-type: u8,
+    word-boundaries: "_:-: :bB:A1:1A:1a:a1:AAa",
+    default-access: RW,
+
+    extern ErrorCode -> u8 {
+        size-bits: 4,
+        infallible: allow,
+    },
+
+    /// The device can be checked for the IC part number.
+
+    command MAC_DEVICE_TYPE {
+        address: 0x440100,
+        fields-out: fieldset MAC_DEVICE_TYPEFieldsOut {
+            size-bytes: 2,
+
+            field DEVICE_TYPE 15:0 -> uint,
+        },
+    },
+    /// The device can be checked for the firmware version of the IC.
+
+    command MAC_FIRMWARE_VERSION {
+        address: 0x440200,
+        fields-out: fieldset MAC_FIRMWARE_VERSIONFieldsOut {
+            size-bytes: 11,
+
+            field DEVICE_NUMBER 15:0 -> uint,
+            field VERSION 31:16 -> uint,
+            field BUILD_NUMBER 47:32 -> uint,
+            field FIRMWARE_TYPE 55:48 -> uint,
+            field IMPEDENCE_TRACK_VERS 71:56 -> uint,
+        },
+    },
+
+    command MAC_HARDWARE_VERSION {
+        address: 0x440300,
+        fields-out: fieldset MAC_HARDWARE_VERSIONFieldsOut {
+            size-bytes: 1,
+
+            field HW_VERS 7:0 -> uint,
+        },
+    },
+
+    command MAC_INSTRUCTION_FLASH_SIGNATURE {
+        address: 0x440400,
+        fields-out: fieldset MAC_INSTRUCTION_FLASH_SIGNATUREFieldsOut {
+            size-bytes: 1,
+
+            field INSN_FLSH_SIG 7:0 -> uint,
+        },
+    },
+
+    command MAC_STATIC_DF_SIGNATURE {
+        address: 0x440500,
+        fields-out: fieldset MAC_STATIC_DF_SIGNATUREFieldsOut {
+            size-bytes: 2,
+
+            field STATIC_DF_SIG 14:0 -> uint,
+            field SIG_MISMATCH 15 -> bool,
+        },
+    },
+
+    command MAC_CHEM_ID {
+        address: 0x440600,
+        fields-out: fieldset MAC_CHEM_IDFieldsOut {
+            size-bytes: 2,
+
+            field CHEM_ID 15:0 -> uint,
+        },
+    },
+
+    command MAC_STATIC_CHEM_DF_SIG {
+        address: 0x440800,
+        fields-out: fieldset MAC_STATIC_CHEM_DF_SIGFieldsOut {
+            size-bytes: 2,
+
+            field STATIC_CHEM_DF_SIG 14:0 -> uint,
+            field SIG_MISMATCH 15 -> bool,
+        },
+    },
+
+    command MAC_ALL_DF_SIGNATURE {
+        address: 0x440900,
+        fields-out: MAC_STATIC_CHEM_DF_SIGFieldsOut,
+    },
+
+    command MAC_SHUTDOWN_MODE {
+        address: 0x441000,
+    },
+
+    command MAC_SLEEP_MODE {
+        address: 0x441100,
+    },
+
+    command MAC_AUTO_CC_OFFSET {
+        address: 0x441300,
+    },
+
+    command MAC_FUSE_TOGGLE {
+        address: 0x441D00,
+    },
+
+    command MAC_PCHG_FET_TOGGLE {
+        address: 0x441E00,
+    },
+
+    command MAC_CHG_FET_TOGGLE {
+        address: 0x441F00,
+    },
+
+    command MAC_DSG_FET_TOGGLE {
+        address: 0x442000,
+    },
+    /// This command enables or disables the gauging function to ease
+    /// testing during manufacturing.
+
+    command MAC_GAUGING {
+        address: 0x442100,
+    },
+
+    command MAC_FET_CTRL {
+        address: 0x442200,
+    },
+
+    command MAC_LIFETIME_DATA_COLLECTION {
+        address: 0x442300,
+    },
+
+    command MAC_PERMANENT_FAILURE {
+        address: 0x442400,
+    },
+
+    command MAC_BLACK_BLOCK_RECORDER {
+        address: 0x442500,
+    },
+
+    command MAC_FUSE {
+        address: 0x442600,
+    },
+
+    command MAC_LED_DISP_EN {
+        address: 0x442700,
+    },
+
+    command MAC_LIFETIME_DATA_RST {
+        address: 0x442800,
+    },
+
+    command MAC_PF_DATA_RST {
+        address: 0x442900,
+    },
+
+    command MAC_BLK_BOX_REC_RESET {
+        address: 0x442A00,
+    },
+
+    command MAC_LED_TOGGLE {
+        address: 0x442B00,
+    },
+
+    command MAC_LED_DISP_PRESS {
+        address: 0x442C00,
+    },
+
+    command MAC_CALIBRATION_MODE {
+        address: 0x442D00,
+    },
+
+    command MAC_LIFETIME_DATA_FLUSH {
+        address: 0x442E00,
+    },
+
+    command MAC_LIFETIME_DATA_SPEED_UP_MODE {
+        address: 0x442F00,
+    },
+
+    command MAC_SEAL {
+        address: 0x443000,
+    },
+
+    command MAC_DEVICE_RESET {
+        address: 0x444100,
+    },
+
+    command MAC_SAFETY_ALERT {
+        address: 0x445000,
+        fields-out: fieldset MAC_SAFETY_ALERTFieldsOut {
+            size-bytes: 4,
+
+            field CUV 0 -> bool,
+            field COV 1 -> bool,
+            field OCC1 2 -> bool,
+            field OCC2 3 -> bool,
+            field OCD1 4 -> bool,
+            field OCD2 5 -> bool,
+            field AOCDL 7 -> bool,
+            field AOCCL 9 -> bool,
+            field ASCDL 11 -> bool,
+            field OTC 12 -> bool,
+            field OTD 13 -> bool,
+            field CUVC 14 -> bool,
+            field DCOT 15 -> bool,
+            field OTF 16 -> bool,
+            field PTO 18 -> bool,
+            field PTOS 19 -> bool,
+            field CTO 20 -> bool,
+            field CTOS 21 -> bool,
+            field OC 22 -> bool,
+            field CHGC 23 -> bool,
+            field CHGV 24 -> bool,
+            field PCHGC 25 -> bool,
+            field UTC 26 -> bool,
+            field UTD 27 -> bool,
+            field COVL 28 -> bool,
+            field OCDL 29 -> bool,
+        },
+    },
+
+    command MAC_SAFETY_STATUS {
+        address: 0x445100,
+        fields-out: fieldset MAC_SAFETY_STATUSFieldsOut {
+            size-bytes: 4,
+
+            field CUV 0 -> bool,
+            field COV 1 -> bool,
+            field OCC1 2 -> bool,
+            field OCC2 3 -> bool,
+            field OCD1 4 -> bool,
+            field OCD2 5 -> bool,
+            field AOCD 6 -> bool,
+            field AOCDL 7 -> bool,
+            field AOCC 8 -> bool,
+            field AOCCL 9 -> bool,
+            field ASCD 10 -> bool,
+            field ASCDL 11 -> bool,
+            field OTC 12 -> bool,
+            field OTD 13 -> bool,
+            field CUVC 14 -> bool,
+            field DCOT 15 -> bool,
+            field OTF 16 -> bool,
+            field HWDF 17 -> bool,
+            field PTO 18 -> bool,
+            field CTO 20 -> bool,
+            field OC 22 -> bool,
+            field CHGC 23 -> bool,
+            field CHGV 24 -> bool,
+            field PCHGC 25 -> bool,
+            field UTC 26 -> bool,
+            field UTD 27 -> bool,
+            field COVL 28 -> bool,
+            field OCDL 29 -> bool,
+        },
+    },
+
+    command MAC_PF_ALERT {
+        address: 0x445200,
+        fields-out: fieldset MAC_PF_ALERTFieldsOut {
+            size-bytes: 4,
+
+            field SUV 0 -> bool,
+            field SOV 1 -> bool,
+            field SOCC 2 -> bool,
+            field SOCD 3 -> bool,
+            field SOT 4 -> bool,
+            field SOTF 6 -> bool,
+            field QIM 7 -> bool,
+            field CB 8 -> bool,
+            field IMP 9 -> bool,
+            field CD 10 -> bool,
+            field VIMR 11 -> bool,
+            field VIMA 12 -> bool,
+            field AOCDL 13 -> bool,
+            field AOCCL 14 -> bool,
+            field ASCDL 15 -> bool,
+            field CFETF 16 -> bool,
+            field DFETF 17 -> bool,
+            field OCDL 18 -> bool,
+            field FUSE 19 -> bool,
+            field AFER 20 -> bool,
+            field AFEC 21 -> bool,
+            field SECOND_LVL 22 -> bool,
+            field TMPC 27 -> bool,
+            field TS1 28 -> bool,
+            field TS2 29 -> bool,
+            field TS3 30 -> bool,
+            field TS4 31 -> bool,
+        },
+    },
+
+    command MAC_PF_STATUS {
+        address: 0x445300,
+        fields-out: fieldset MAC_PF_STATUSFieldsOut {
+            size-bytes: 4,
+
+            field SUV 0 -> bool,
+            field SOV 1 -> bool,
+            field SOCC 2 -> bool,
+            field SOCD 3 -> bool,
+            field SOT 4 -> bool,
+            field COVL 5 -> bool,
+            field SOTF 6 -> bool,
+            field QIM 7 -> bool,
+            field CB 8 -> bool,
+            field IMP 9 -> bool,
+            field CD 10 -> bool,
+            field VIMR 11 -> bool,
+            field VIMA 12 -> bool,
+            field AOCDL 13 -> bool,
+            field AOCCL 14 -> bool,
+            field ASCDL 15 -> bool,
+            field CFETF 16 -> bool,
+            field DFETF 17 -> bool,
+            field OCDL 18 -> bool,
+            field FUSE 19 -> bool,
+            field AFER 20 -> bool,
+            field AFEC 21 -> bool,
+            // TODO FIX (retained from the YAML).
+            field SECOND_LVL 22 -> bool,
+            field TMPC 27 -> bool,
+            field TS1 28 -> bool,
+            field TS2 29 -> bool,
+            field TS3 30 -> bool,
+            field TS4 31 -> bool,
+        },
+    },
+
+    command MAC_OPERATION_STATUS {
+        address: 0x445400,
+        fields-out: fieldset MAC_OPERATION_STATUSFieldsOut {
+            size-bytes: 4,
+
+            field PRES 0 -> bool,
+            field DSG 1 -> bool,
+            field CHG 2 -> bool,
+            field PCHG 3 -> bool,
+            field ACTHR 4 -> bool,
+            field FUSE 5 -> bool,
+            field EMSHUT 6 -> bool,
+            field BTP_INT 7 -> bool,
+            field SEC 9:8 -> uint as enum MACSecurityMode {
+                Reserved: 0,
+                FullAccess: 1,
+                UnSealed: 2,
+                Sealed: 3,
+            },
+            field SDV 10 -> bool,
+            field SS 11 -> bool,
+            field PF 12 -> bool,
+            field XDSG 13 -> bool,
+            field XCHG 14 -> bool,
+            field SLEEP 15 -> bool,
+            field SDM 16 -> bool,
+            field LED 17 -> bool,
+            field AUTH 18 -> bool,
+            field AUTOCALM 19 -> bool,
+            field CAL 20 -> bool,
+            field CAL_OFFSET 21 -> bool,
+            field XL 22 -> bool,
+            field SLEEPM 23 -> bool,
+            field INIT 24 -> bool,
+            field SMBLCAL 25 -> bool,
+            field STORAGEM 26 -> bool,
+            field CB 28 -> bool,
+            field DISCONN 29 -> bool,
+            field PSSHUT 30 -> bool,
+            field IOSHUT 31 -> bool,
+        },
+    },
+
+    command MAC_CHARGING_STATUS {
+        address: 0x445500,
+        fields-out: fieldset MAC_CHARGING_STATUSFieldsOut {
+            size-bytes: 5,
+
+            field UT 0 -> bool,
+            field LT 1 -> bool,
+            field STL 2 -> bool,
+            field RT 3 -> bool,
+            field STH 4 -> bool,
+            field HT 5 -> bool,
+            field OT 6 -> bool,
+            field PV 8 -> bool,
+            field LV 9 -> bool,
+            field MV 10 -> bool,
+            field HV 11 -> bool,
+            field CHG_IN 12 -> bool,
+            field CHG_SU 13 -> bool,
+            field MCHG 14 -> bool,
+            field VCT 15 -> bool,
+            field CCR 16 -> bool,
+            field CVR 17 -> bool,
+            field CCC 18 -> bool,
+            field NCT 19 -> bool,
+            field ERM 20 -> bool,
+            field ERETM 21 -> bool,
+            field DEG 23:22 -> uint as enum DegradationMode {
+                NoDegradation: 0,
+                CycleCountBased: 1,
+                SohBased: 2,
+                RuntimeBased: 3,
+            },
+            field V_PV 24 -> bool,
+            field V_LV 25 -> bool,
+            field V_MV 26 -> bool,
+            field V_HV 27 -> bool,
+            field V_IN 28 -> bool,
+            field V_SU 29 -> bool,
+            field V_MCHG 30 -> bool,
+            field V_VCT 31 -> bool,
+            field SOC_PV 32 -> bool,
+            field SOC_LV 33 -> bool,
+            field SOC_MV 34 -> bool,
+            field SOC_HV 35 -> bool,
+            field SOC_IN 36 -> bool,
+            field SOC_SU 37 -> bool,
+            field SOC_MCHG 38 -> bool,
+            field SOC_VCT 39 -> bool,
+        },
+    },
+
+    command MAC_GAUGING_STATUS {
+        address: 0x445600,
+        fields-out: fieldset MAC_GAUGING_STATUSFieldsOut {
+            size-bytes: 5,
+
+            field FD 0 -> bool,
+            field FC 1 -> bool,
+            field TD 2 -> bool,
+            field TC 3 -> bool,
+            field BAL_EN 4 -> bool,
+            field EDV 5 -> bool,
+            field DSG 6 -> bool,
+            field CF 7 -> bool,
+            field REST 8 -> bool,
+            field R_DIS 10 -> bool,
+            field VOK 11 -> bool,
+            field QEN 12 -> bool,
+            field SLPQMAX 13 -> bool,
+            field OCVPRED 14 -> bool,
+            field NSFM 15 -> bool,
+            field VDQ 16 -> bool,
+            field QMAX 17 -> bool,
+            field RX 18 -> bool,
+            field LDMD 19 -> bool,
+            field OCVFR 20 -> bool,
+            field VLB 21 -> bool,
+            field PERF_MODE 24 -> bool,
+        },
+    },
+
+    command MAC_MANUFACTURING_STATUS {
+        address: 0x445700,
+        fields-out: fieldset MAC_MANUFACTURING_STATUSFieldsOut {
+            size-bytes: 2,
+
+            field PCHG_EN 0 -> bool,
+            field CHG_EN 1 -> bool,
+            field DSG_EN 2 -> bool,
+            field GAUGE_EN 3 -> bool,
+            field FET_EN 4 -> bool,
+            field LF_EN 5 -> bool,
+            field PF_EN 6 -> bool,
+            field BBR_EN 7 -> bool,
+            field FUSE_EN 8 -> bool,
+            field LED_EN 9 -> bool,
+            field LT_TEST 14 -> bool,
+            field CAL_EN 15 -> bool,
+        },
+    },
+
+    command MAC_AFE_REG {
+        address: 0x445800,
+        fields-out: fieldset MAC_AFE_REGFieldsOut {
+            size-bytes: 21,
+
+            field AFE_INT_STATUS 7:0 -> uint,
+            field AFE_FET_STATUS 15:8 -> uint,
+            field AFE_RXIN 23:16 -> uint,
+            field AFE_LATCH_STATUS 31:24 -> uint,
+            field AFE_INT_EN 39:32 -> uint,
+            field AFE_CTRL 47:40 -> uint,
+            field AFE_RXIEN 55:48 -> uint,
+            field AFE_RLOUT 63:56 -> uint,
+            field AFE_RHOUT 71:64 -> uint,
+            field AFE_RHINT 79:72 -> uint,
+            field AFE_CELL_BALANCE 87:80 -> uint,
+            field AFE_ADC_CC_CTRL 95:88 -> uint,
+            field AFE_ADC_MUX_CTRL 103:96 -> uint,
+            field AFE_LED_CTRL 111:104 -> uint,
+            field AFE_HW_CTRL 119:112 -> uint,
+            field AFE_TMR_CTRL 127:120 -> uint,
+            field AFE_PROTECTION 135:128 -> uint,
+            field AFE_OCD 143:136 -> uint,
+            field AFE_SCC 151:144 -> uint,
+            field AFE_SCD1 159:152 -> uint,
+            field AFE_SCD2 167:160 -> uint,
+        },
+    },
+
+    command NO_LOAD_REM_CAP {
+        address: 0x445A00,
+        fields-out: fieldset NO_LOAD_REM_CAPFieldsOut {
+            size-bytes: 2,
+
+            field REMAINING_CAPACITY 15:0 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_1 {
+        address: 0x446000,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_1FieldsOut {
+            size-bytes: 26,
+
+            field CELL_1_MAX_V 15:0 -> uint,
+            field CELL_2_MAX_V 31:16 -> uint,
+            field CELL_3_MAX_V 47:32 -> uint,
+            field CELL_4_MAX_V 63:48 -> uint,
+            field CELL_1_MIN_V 79:64 -> uint,
+            field CELL_2_MIN_V 95:80 -> uint,
+            field CELL_3_MIN_V 111:96 -> uint,
+            field CELL_4_MIN_V 127:112 -> uint,
+            field MAX_DELTA_CELL_V 143:128 -> uint,
+            field MAX_CHARGE_A 159:144 -> uint,
+            field MAX_DISCHARGE_A 175:160 -> uint,
+            field MAX_AVG_DISCHARGE_A 191:176 -> uint,
+            field MAX_AVG_DISCHARGE_PWR 207:192 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_2 {
+        address: 0x446100,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_2FieldsOut {
+            size-bytes: 20,
+
+            field MIN_FCC_SOH_MAH 15:0 -> uint,
+            field MIN_FCC_SOH_CWH 31:16 -> uint,
+            field CB_TIME_CELL_1 63:32 -> uint,
+            field CB_TIME_CELL_2 95:64 -> uint,
+            field CB_TIME_CELL_3 127:96 -> uint,
+            field CB_TIME_CELL_4 159:128 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_3 {
+        address: 0x446200,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_3FieldsOut {
+            size-bytes: 4,
+
+            field TOTAL_FW_RUNTIME 31:0 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_4 {
+        address: 0x446300,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_4FieldsOut {
+            size-bytes: 32,
+
+            field NUM_COV_EVENTS 15:0 -> uint,
+            field LAST_COV_EVENT 31:16 -> uint,
+            field NUM_CUV_EVENTS 47:32 -> uint,
+            field LAST_CUV_EVENT 63:48 -> uint,
+            field NUM_OCD1_EVENT 79:64 -> uint,
+            field LAST_OCD1_EVENT 95:80 -> uint,
+            field NUM_OCD2_EVENTS 111:96 -> uint,
+            field LAST_OCD2_EVENT 127:112 -> uint,
+            field NUM_OCC1_EVENTS 143:128 -> uint,
+            field LAST_OCC1_EVENT 159:144 -> uint,
+            field NUM_OCC2_EVENTS 175:160 -> uint,
+            field LAST_OCC2_EVENT 191:176 -> uint,
+            field NUM_AOLD_EVENTS 207:192 -> uint,
+            field LAST_AOLD_EVENT 223:208 -> uint,
+            field NUM_ASCD_EVENTS 239:224 -> uint,
+            field LAST_ASCD_EVENT 255:240 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_5 {
+        address: 0x446400,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_5FieldsOut {
+            size-bytes: 32,
+
+            field NUM_ASCC_EVENTS 15:0 -> uint,
+            field LAST_ASCC_EVENT 31:16 -> uint,
+            field NUM_OTC_EVENTS 47:32 -> uint,
+            field LAST_OTC_EVENT 63:48 -> uint,
+            field NUM_OTD_EVENT 79:64 -> uint,
+            field LAST_OTD_EVENT 95:80 -> uint,
+            field NUM_OTF_EVENTS 111:96 -> uint,
+            field LAST_OTF_EVENT 127:112 -> uint,
+            field NUM_VALID_CHG_TERM 143:128 -> uint,
+            field LAST_VALID_CHG_TERM 159:144 -> uint,
+            field NUM_QMAX_UPDATES 175:160 -> uint,
+            field LAST_QMAX_UPDATE 191:176 -> uint,
+            field NUM_RA_UPDATES 207:192 -> uint,
+            field LAST_RA_UPDATE 223:208 -> uint,
+            field NUM_RA_DISABLE 239:224 -> uint,
+            field LAST_RA_DISABLE 255:240 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_6 {
+        address: 0x446500,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_6FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_UT_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_UT_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_UT_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_UT_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_UT_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_UT_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_UT_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_UT_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_7 {
+        address: 0x446600,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_7FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_LT_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_LT_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_LT_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_LT_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_LT_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_LT_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_LT_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_LT_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_8 {
+        address: 0x446700,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_8FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_STL_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_STL_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_STL_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_STL_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_STL_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_STL_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_STL_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_STL_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_9 {
+        address: 0x446800,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_9FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_RT_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_RT_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_RT_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_RT_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_RT_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_RT_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_RT_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_RT_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_10 {
+        address: 0x446900,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_10FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_STH_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_STH_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_STH_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_STH_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_STH_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_STH_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_STH_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_STH_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_11 {
+        address: 0x446A00,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_11FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_HT_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_HT_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_HT_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_HT_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_HT_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_HT_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_HT_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_HT_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_12 {
+        address: 0x446B00,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_12FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_OT_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_OT_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_OT_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_OT_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_OT_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_OT_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_OT_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_OT_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_13 {
+        address: 0x446C00,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_13FieldsOut {
+            size-bytes: 30,
+
+            field MAX_TEMP_CELL_RELAX 7:0 -> uint,
+            field MIN_TEMP_CELL_RELAX 15:8 -> uint,
+            field MAX_DELTA_TEMP_CELL_RELAX 23:16 -> uint,
+            field MAX_TEMP_INT_RELAX 31:24 -> uint,
+            field MIN_TEMP_INT_RELAX 39:32 -> uint,
+            field MAX_TEMP_FET_RELAX 47:40 -> uint,
+            field MAX_TEMP_TS1_RELAX 55:48 -> uint,
+            field MAX_TEMP_TS2_RELAX 63:56 -> uint,
+            field MAX_TEMP_TS3_RELAX 71:64 -> uint,
+            field MAX_TEMP_TS4_RELAX 79:72 -> uint,
+            field MIN_TEMP_TS1_RELAX 87:80 -> uint,
+            field MIN_TEMP_TS2_RELAX 95:88 -> uint,
+            field MIN_TEMP_TS3_RELAX 103:96 -> uint,
+            field MIN_TEMP_TS4_RELAX 111:104 -> uint,
+            field MAX_TEMP_TMP468_1_RELAX 119:112 -> uint,
+            field MAX_TEMP_TMP468_2_RELAX 127:120 -> uint,
+            field MAX_TEMP_TMP468_3_RELAX 135:128 -> uint,
+            field MAX_TEMP_TMP468_4_RELAX 143:136 -> uint,
+            field MAX_TEMP_TMP468_5_RELAX 151:144 -> uint,
+            field MAX_TEMP_TMP468_6_RELAX 159:152 -> uint,
+            field MAX_TEMP_TMP468_7_RELAX 167:160 -> uint,
+            field MAX_TEMP_TMP468_8_RELAX 175:168 -> uint,
+            field MIN_TEMP_TMP468_1_RELAX 183:176 -> uint,
+            field MIN_TEMP_TMP468_2_RELAX 191:184 -> uint,
+            field MIN_TEMP_TMP468_3_RELAX 199:192 -> uint,
+            field MIN_TEMP_TMP468_4_RELAX 207:200 -> uint,
+            field MIN_TEMP_TMP468_5_RELAX 215:208 -> uint,
+            field MIN_TEMP_TMP468_6_RELAX 223:216 -> uint,
+            field MIN_TEMP_TMP468_7_RELAX 231:224 -> uint,
+            field MIN_TEMP_TMP468_8_RELAX 239:232 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_14 {
+        address: 0x446D00,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_14FieldsOut {
+            size-bytes: 30,
+
+            field MAX_TEMP_CELL_CHARGE 7:0 -> uint,
+            field MIN_TEMP_CELL_CHARGE 15:8 -> uint,
+            field MAX_DELTA_TEMP_CELL_CHARGE 23:16 -> uint,
+            field MAX_TEMP_INT_CHARGE 31:24 -> uint,
+            field MIN_TEMP_INT_CHARGE 39:32 -> uint,
+            field MAX_TEMP_FET_CHARGE 47:40 -> uint,
+            field MAX_TEMP_TS1_CHARGE 55:48 -> uint,
+            field MAX_TEMP_TS2_CHARGE 63:56 -> uint,
+            field MAX_TEMP_TS3_CHARGE 71:64 -> uint,
+            field MAX_TEMP_TS4_CHARGE 79:72 -> uint,
+            field MIN_TEMP_TS1_CHARGE 87:80 -> uint,
+            field MIN_TEMP_TS2_CHARGE 95:88 -> uint,
+            field MIN_TEMP_TS3_CHARGE 103:96 -> uint,
+            field MIN_TEMP_TS4_CHARGE 111:104 -> uint,
+            field MAX_TEMP_TMP468_1_CHARGE 119:112 -> uint,
+            field MAX_TEMP_TMP468_2_CHARGE 127:120 -> uint,
+            field MAX_TEMP_TMP468_3_CHARGE 135:128 -> uint,
+            field MAX_TEMP_TMP468_4_CHARGE 143:136 -> uint,
+            field MAX_TEMP_TMP468_5_CHARGE 151:144 -> uint,
+            field MAX_TEMP_TMP468_6_CHARGE 159:152 -> uint,
+            field MAX_TEMP_TMP468_7_CHARGE 167:160 -> uint,
+            field MAX_TEMP_TMP468_8_CHARGE 175:168 -> uint,
+            field MIN_TEMP_TMP468_1_CHARGE 183:176 -> uint,
+            field MIN_TEMP_TMP468_2_CHARGE 191:184 -> uint,
+            field MIN_TEMP_TMP468_3_CHARGE 199:192 -> uint,
+            field MIN_TEMP_TMP468_4_CHARGE 207:200 -> uint,
+            field MIN_TEMP_TMP468_5_CHARGE 215:208 -> uint,
+            field MIN_TEMP_TMP468_6_CHARGE 223:216 -> uint,
+            field MIN_TEMP_TMP468_7_CHARGE 231:224 -> uint,
+            field MIN_TEMP_TMP468_8_CHARGE 239:232 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_15 {
+        address: 0x446E00,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_15FieldsOut {
+            size-bytes: 30,
+
+            field MAX_TEMP_CELL_DISCHARGE 7:0 -> uint,
+            field MIN_TEMP_CELL_DISCHARGE 15:8 -> uint,
+            field MAX_DELTA_TEMP_CELL_DISCHARGE 23:16 -> uint,
+            field MAX_TEMP_INT_DISCHARGE 31:24 -> uint,
+            field MIN_TEMP_INT_DISCHARGE 39:32 -> uint,
+            field MAX_TEMP_FET_DISCHARGE 47:40 -> uint,
+            field MAX_TEMP_TS1_DISCHARGE 55:48 -> uint,
+            field MAX_TEMP_TS2_DISCHARGE 63:56 -> uint,
+            field MAX_TEMP_TS3_DISCHARGE 71:64 -> uint,
+            field MAX_TEMP_TS4_DISCHARGE 79:72 -> uint,
+            field MIN_TEMP_TS1_DISCHARGE 87:80 -> uint,
+            field MIN_TEMP_TS2_DISCHARGE 95:88 -> uint,
+            field MIN_TEMP_TS3_DISCHARGE 103:96 -> uint,
+            field MIN_TEMP_TS4_DISCHARGE 111:104 -> uint,
+            field MAX_TEMP_TMP468_1_DISCHARGE 119:112 -> uint,
+            field MAX_TEMP_TMP468_2_DISCHARGE 127:120 -> uint,
+            field MAX_TEMP_TMP468_3_DISCHARGE 135:128 -> uint,
+            field MAX_TEMP_TMP468_4_DISCHARGE 143:136 -> uint,
+            field MAX_TEMP_TMP468_5_DISCHARGE 151:144 -> uint,
+            field MAX_TEMP_TMP468_6_DISCHARGE 159:152 -> uint,
+            field MAX_TEMP_TMP468_7_DISCHARGE 167:160 -> uint,
+            field MAX_TEMP_TMP468_8_DISCHARGE 175:168 -> uint,
+            field MIN_TEMP_TMP468_1_DISCHARGE 183:176 -> uint,
+            field MIN_TEMP_TMP468_2_DISCHARGE 191:184 -> uint,
+            field MIN_TEMP_TMP468_3_DISCHARGE 199:192 -> uint,
+            field MIN_TEMP_TMP468_4_DISCHARGE 207:200 -> uint,
+            field MIN_TEMP_TMP468_5_DISCHARGE 215:208 -> uint,
+            field MIN_TEMP_TMP468_6_DISCHARGE 223:216 -> uint,
+            field MIN_TEMP_TMP468_7_DISCHARGE 231:224 -> uint,
+            field MIN_TEMP_TMP468_8_DISCHARGE 239:232 -> uint,
+        },
+    },
+
+    command MAC_POWER_EVENTS {
+        address: 0x446F00,
+        fields-out: fieldset MAC_POWER_EVENTSFieldsOut {
+            size-bytes: 4,
+
+            field NUM_SHUTDOWNS 7:0 -> uint,
+            field NUM_PART_RESETS 15:8 -> uint,
+            field NUM_FULL_RESETS 23:16 -> uint,
+            field NUM_WDT_RESETS 31:24 -> uint,
+        },
+    },
+
+    command MAC_MANUFACTURE_INFO {
+        address: 0x447000,
+        fields-out: fieldset MAC_MANUFACTURE_INFOFieldsOut {
+            size-bytes: 32,
+
+            field MANUFACTURE_INFO_0 63:0 -> uint,
+            field MANUFACTURE_INFO_1 127:64 -> uint,
+            field MANUFACTURE_INFO_2 191:128 -> uint,
+            field MANUFACTURE_INFO_3 255:192 -> uint,
+        },
+    },
+
+    command MAC_DA_STATUS_1 {
+        address: 0x447100,
+        fields-out: fieldset MAC_DA_STATUS_1FieldsOut {
+            size-bytes: 32,
+
+            field CELL_VOLTAGE_1 15:0 -> uint,
+            field CELL_VOLTAGE_2 31:16 -> uint,
+            field CELL_VOLTAGE_3 47:32 -> uint,
+            field CELL_VOLTAGE_4 63:48 -> uint,
+            field BAT_VOLTAGE 79:64 -> uint,
+            field PACK_VOLTAGE 95:80 -> uint,
+            field CELL_CURRENT_1 111:96 -> uint,
+            field CELL_CURRENT_2 127:112 -> uint,
+            field CELL_CURRENT_3 143:128 -> uint,
+            field CELL_CURRENT_4 159:144 -> uint,
+            field CELL_PWR_1 175:160 -> uint,
+            field CELL_PWR_2 191:176 -> uint,
+            field CELL_PWR_3 207:192 -> uint,
+            field CELL_PWR_4 223:208 -> uint,
+            field TOTAL_PWR 239:224 -> uint,
+            field AVG_PWR 255:240 -> uint,
+        },
+    },
+
+    command MAC_DA_STATUS_2 {
+        address: 0x447200,
+        fields-out: fieldset MAC_DA_STATUS_2FieldsOut {
+            size-bytes: 26,
+
+            field INT_TEMP 15:0 -> uint,
+            field TS1_TEMP 31:16 -> uint,
+            field TS2_TEMP 47:32 -> uint,
+            field TS3_TEMP 63:48 -> uint,
+            field TS4_TEMP 79:64 -> uint,
+            field CELL_TEMP 95:80 -> uint,
+            field FET_TEMP 111:96 -> uint,
+            field GAUGING_TEMP 127:112 -> uint,
+            field USER_TEMP 143:128 -> uint,
+            field UNCOMP_CELL_V_1 159:144 -> uint,
+            field UNCOMP_CELL_V_2 175:160 -> uint,
+            field UNCOMP_CELL_V_3 191:176 -> uint,
+            field UNCOMP_CELL_V_4 207:192 -> uint,
+        },
+    },
+
+    command MAC_GAUGE_STATUS_1 {
+        address: 0x447300,
+        fields-out: fieldset MAC_GAUGE_STATUS_1FieldsOut {
+            size-bytes: 32,
+
+            field TRUE_REM_Q 15:0 -> uint,
+            field TRUE_REM_E 31:16 -> uint,
+            field INITIAL_Q 47:32 -> uint,
+            field INITIAL_E 63:48 -> uint,
+            field TRUE_FCC_Q 79:64 -> uint,
+            field TRUE_FCC_E 95:80 -> uint,
+            field T_SIM 111:96 -> uint,
+            field T_AMBIENT 127:112 -> uint,
+            field RA_SCALE_0 143:128 -> uint,
+            field RA_SCALE_1 159:144 -> uint,
+            field RA_SCALE_2 175:160 -> uint,
+            field RA_SCALE_3 191:176 -> uint,
+            field COMP_RES_0 207:192 -> uint,
+            field COMP_RES_1 223:208 -> uint,
+            field COMP_RES_2 239:224 -> uint,
+            field COMP_RES_3 255:240 -> uint,
+        },
+    },
+
+    command MAC_GAUGE_STATUS_2 {
+        address: 0x447400,
+        fields-out: fieldset MAC_GAUGE_STATUS_2FieldsOut {
+            size-bytes: 32,
+
+            field PACK_GRID 7:0 -> uint,
+            field Q_MAX_STATUS 9:8 -> uint as enum MACQMaxStatus {
+                BattOK: 0,
+                QMaxUpdated: 1,
+                QMaxRTableUpdated: 2,
+                Reserved: 3,
+            },
+            field ITEN 10 -> bool,
+            field QMAX_FIELD_UPDATED 11 -> bool,
+            field CELL_GRID_0 23:16 -> uint,
+            field CELL_GRID_1 31:24 -> uint,
+            field CELL_GRID_2 39:32 -> uint,
+            field CELL_GRID_3 47:40 -> uint,
+            field STATE_TIME 79:48 -> uint,
+            field DOD0_0 95:80 -> uint,
+            field DOD0_1 111:96 -> uint,
+            field DOD0_2 127:112 -> uint,
+            field DOD0_3 143:128 -> uint,
+            field DOD0_PASSED_Q 159:144 -> uint,
+            field DOD0_PASSED_E 175:160 -> uint,
+            field DOD0_TIME 191:176 -> uint,
+            field DODEOC_0 207:192 -> uint,
+            field DODEOC_1 223:208 -> uint,
+            field DODEOC_2 239:224 -> uint,
+            field DODEOC_3 255:240 -> uint,
+        },
+    },
+
+    command MAC_GAUGE_STATUS_3 {
+        address: 0x447500,
+        fields-out: fieldset MAC_GAUGE_STATUS_3FieldsOut {
+            // The datasheet specifies 24 bytes, but the FG does not return PEC until 32 bytes have been read.
+            size-bytes: 32,
+
+            field QMAX_0 15:0 -> uint,
+            field QMAX_1 31:16 -> uint,
+            field QMAX_2 47:32 -> uint,
+            field QMAX_3 63:48 -> uint,
+            field QMAX_DOD0_0 79:64 -> uint,
+            field QMAX_DOD0_1 95:80 -> uint,
+            field QMAX_DOD0_2 111:96 -> uint,
+            field QMAX_DOD0_3 127:112 -> uint,
+            field QMAX_PASSED_Q 143:128 -> uint,
+            field QMAX_TIME 159:144 -> uint,
+            field TEMP_K_FACTOR 175:160 -> uint,
+            field TEMP_A_FACTOR 191:176 -> uint,
+        },
+    },
+
+    command MAC_CB_STATUS {
+        address: 0x447600,
+        fields-out: fieldset MAC_CB_STATUSFieldsOut {
+            size-bytes: 19,
+
+            field CB_TIME_0 15:0 -> uint,
+            field CB_TIME_1 31:16 -> uint,
+            field CB_TIME_2 47:32 -> uint,
+            field CB_TIME_3 63:48 -> uint,
+            field CELL_1_BALANCE_DOD 79:64 -> uint,
+            field CELL_2_BALANCE_DOD 95:80 -> uint,
+            field CELL_3_BALANCE_DOD 111:96 -> uint,
+            field CELL_4_BALANCE_DOD 127:112 -> uint,
+            field TOTAL_DOD_CHRG 143:128 -> uint,
+            field CELL_BALANCE_STAT 151:144 -> uint,
+        },
+    },
+
+    command MAC_STATE_OF_HEALTH {
+        address: 0x447700,
+        fields-out: fieldset MAC_STATE_OF_HEALTHFieldsOut {
+            size-bytes: 4,
+
+            field SOH_FCC 15:0 -> uint,
+            field SOH_ENERGY 31:16 -> uint,
+        },
+    },
+
+    command MAC_FILTER_CAPACITY {
+        address: 0x447800,
+        fields-out: fieldset MAC_FILTER_CAPACITYFieldsOut {
+            size-bytes: 8,
+
+            field FILT_REM_CAP 15:0 -> uint,
+            field FILT_REM_ENERGY 31:16 -> uint,
+            field FILT_FULL_CHG_CAP 47:32 -> uint,
+            field FILT_FULL_CHG_ENERGY 63:48 -> uint,
+        },
+    },
+
+    command MAC_MANUFACTURE_INFO_B {
+        address: 0x447A00,
+        fields-out: fieldset MAC_MANUFACTURE_INFO_BFieldsOut {
+            size-bytes: 32,
+
+            field MANUFACTURE_INFO_B_0 63:0 -> uint,
+            field MANUFACTURE_INFO_B_1 127:64 -> uint,
+            field MANUFACTURE_INFO_B_2 191:128 -> uint,
+            field MANUFACTURE_INFO_B_3 255:192 -> uint,
+        },
+    },
+
+    command MAC_LIFETIME_DATA_BLOCK_16 {
+        address: 0x447E00,
+        fields-out: fieldset MAC_LIFETIME_DATA_BLOCK_16FieldsOut {
+            size-bytes: 32,
+
+            field TIME_SPENT_LFT_UUT_RSOC_A 31:0 -> uint,
+            field TIME_SPENT_LFT_UUT_RSOC_B 63:32 -> uint,
+            field TIME_SPENT_LFT_UUT_RSOC_C 95:64 -> uint,
+            field TIME_SPENT_LFT_UUT_RSOC_D 127:96 -> uint,
+            field TIME_SPENT_LFT_UUT_RSOC_E 159:128 -> uint,
+            field TIME_SPENT_LFT_UUT_RSOC_F 191:160 -> uint,
+            field TIME_SPENT_LFT_UUT_RSOC_G 223:192 -> uint,
+            field TIME_SPENT_LFT_UUT_RSOC_H 255:224 -> uint,
+        },
+    },
+
+    command MAC_ROM_MODE {
+        address: 0x44000F,
+    },
+
+    command MAC_EXIT_CALIBRATION_OUTPUT_MODE {
+        address: 0x4480F0,
+    },
+
+    command MAC_STOP_OUTPUT_CCADC_CAL {
+        address: 0x4481F0,
+        address-overlap: allow,
+    },
+
+    command MAC_OUTPUT_CCADC_CAL {
+        address: 0x4481F0,
+        address-overlap: allow,
+        fields-out: fieldset MAC_OUTPUT_CCADC_CALFieldsOut {
+            size-bytes: 24,
+
+            field REFRESH_CTR 7:0 -> uint,
+            field STATUS 15:8 -> uint,
+            field CURRENT 31:16 -> uint,
+            field CELL_VOLTAGE_1 47:32 -> uint,
+            field CELL_VOLTAGE_2 63:48 -> uint,
+            field CELL_VOLTAGE_3 79:64 -> uint,
+            field CELL_VOLTAGE_4 95:80 -> uint,
+            field PACK_VOLTAGE 111:96 -> uint,
+            field BAT_VOLTAGE 127:112 -> uint,
+            field CELL_CURRENT_1 143:128 -> uint,
+            field CELL_CURRENT_2 159:144 -> uint,
+            field CELL_CURRENT_3 175:160 -> uint,
+            field CELL_CURRENT_4 191:176 -> uint,
+        },
+    },
+
+    command MAC_STOP_OUTPUT_SHORTED_CCADC_CAL {
+        address: 0x4482F0,
+        address-overlap: allow,
+    },
+
+    command MAC_OUTPUT_SHORTED_CCADC_CAL {
+        address: 0x4482F0,
+        address-overlap: allow,
+        fields-out: MAC_OUTPUT_CCADC_CALFieldsOut,
+    },
+    /// This read/write word function sets a low capacity alarm threshold for the cell stack.
+
+    register REMAINING_CAPACITY_ALARM {
+        address: 0x01,
+        reset: 300,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field REMAINING_CAPACITY_ALARM 15:0 -> uint,
+        },
+    },
+    /// This read/write word function sets a low remaining time-to-fully discharge alarm threshold for the cell stack.
+
+    register REMAINING_TIME_ALARM {
+        address: 0x02,
+        reset: 10,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field REMAINING_TIME_ALARM 15:0 -> uint,
+        },
+    },
+
+    register BATTERY_MODE {
+        address: 0x03,
+        reset: 0x4000,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field ICC 0 RO -> bool,
+            field PBS 1 RO -> bool,
+            field CF 7 RO -> bool,
+            field CC 8 -> bool,
+            field PB 9 -> bool,
+            field AM 13 -> bool,
+            field CHGM 14 -> bool,
+            field CAPM 15 -> bool,
+        },
+    },
+
+    register AT_RATE {
+        address: 0x04,
+        reset: 0,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field AT_RATE 15:0 -> int,
+        },
+    },
+
+    register AT_RATE_TIME_TO_FULL {
+        address: 0x05,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field AT_RATE_TIME_TO_FULL 15:0 RO -> uint,
+        },
+    },
+
+    register AT_RATE_TIME_TO_EMPTY {
+        address: 0x06,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field AT_RATE_TIME_TO_EMPTY 15:0 RO -> uint,
+        },
+    },
+
+    register AT_RATE_OK {
+        address: 0x07,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field AT_RATE_OK 15:0 RO -> uint,
+        },
+    },
+
+    register TEMPERATURE {
+        address: 0x08,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field TEMPERATURE 15:0 RO -> uint,
+        },
+    },
+
+    register VOLTAGE {
+        address: 0x09,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field VOLTAGE 15:0 RO -> uint,
+        },
+    },
+
+    register CURRENT {
+        address: 0x0A,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CURRENT 15:0 RO -> int,
+        },
+    },
+
+    register AVG_CURRENT {
+        address: 0x0B,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field AVG_CURRENT 15:0 RO -> int,
+        },
+    },
+
+    register MAX_ERROR {
+        address: 0x0C,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field MAX_ERROR 15:0 RO -> uint,
+        },
+    },
+
+    register RELATIVE_STATE_OF_CHARGE {
+        address: 0x0D,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field RELATIVE_STATE_OF_CHARGE 15:0 RO -> uint,
+        },
+    },
+
+    register ABSOLUTE_STATE_OF_CHARGE {
+        address: 0x0E,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field ABSOLUTE_STATE_OF_CHARGE 15:0 RO -> uint,
+        },
+    },
+
+    register REMAINING_CAPACITY {
+        address: 0x0F,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field REMAINING_CAPACITY 15:0 RO -> uint,
+        },
+    },
+
+    register FULL_CHARGE_CAPACITY {
+        address: 0x10,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field FULL_CHARGE_CAPACITY 15:0 RO -> uint,
+        },
+    },
+
+    register RUN_TIME_TO_EMPTY {
+        address: 0x11,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field RUN_TIME_TO_EMPTY 15:0 RO -> uint,
+        },
+    },
+
+    register AVERAGE_TIME_TO_EMPTY {
+        address: 0x12,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field AVERAGE_TIME_TO_EMPTY 15:0 RO -> uint,
+        },
+    },
+
+    register AVERAGE_TIME_TO_FULL {
+        address: 0x13,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field AVERAGE_TIME_TO_FULL 15:0 RO -> uint,
+        },
+    },
+
+    register CHARGING_CURRENT {
+        address: 0x14,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CHARGING_CURRENT 15:0 RO -> uint,
+        },
+    },
+
+    register CHARGING_VOLTAGE {
+        address: 0x15,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CHARGING_VOLTAGE 15:0 RO -> uint,
+        },
+    },
+
+    register BATTERY_STATUS {
+        address: 0x16,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field EC 3:0 RO -> uint as ErrorCode,
+            field FD 4 RO -> bool,
+            field FC 5 RO -> bool,
+            field DSG 6 RO -> bool,
+            field INIT 7 RO -> bool,
+            field RTA 8 RO -> bool,
+            field RCA 9 RO -> bool,
+            field TDA 11 RO -> bool,
+            field OTA 12 RO -> bool,
+            field TCA 14 RO -> bool,
+            field OCA 15 RO -> bool,
+        },
+    },
+
+    register CYCLE_COUNT {
+        address: 0x17,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CYCLE_COUNT 15:0 -> uint,
+        },
+    },
+
+    register DESIGN_CAPACITY {
+        address: 0x18,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field DESIGN_CAPACITY 15:0 -> uint,
+        },
+    },
+
+    register DESIGN_VOLTAGE {
+        address: 0x19,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field DESIGN_VOLTAGE 15:0 -> uint,
+        },
+    },
+
+    register SPECIFICATION_INFO {
+        address: 0x1A,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field REVISION 3:0 -> uint,
+            field VERSION 7:4 -> uint,
+            field VSCALE 11:8 RO -> uint,
+            field IPSCALE 15:12 RO -> uint,
+        },
+    },
+
+    register MANUFACTURE_DATE {
+        address: 0x1B,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field MANUFACTURE_DATE 15:0 -> uint,
+        },
+    },
+
+    register SERIAL_NUMBER {
+        address: 0x1C,
+        reset: 0x0001,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field SERIAL_NUMBER 15:0 -> uint,
+        },
+    },
+
+    buffer MANUFACTURE_NAME {
+        access: RO,
+        address: 0x20,
+    },
+
+    buffer DEVICE_NAME {
+        access: RO,
+        address: 0x21,
+    },
+
+    buffer DEVICE_CHEMISTRY {
+        access: RO,
+        address: 0x22,
+    },
+
+    buffer MANUFACTURER_DATA {
+        access: RO,
+        address: 0x23,
+    },
+
+    buffer AUTHENTICATE {
+        address: 0x2F,
+    },
+
+    register CELL_VOLTAGE_4 {
+        address: 0x3C,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CELL_VOLTAGE_4 15:0 RO -> uint,
+        },
+    },
+
+    register CELL_VOLTAGE_3 {
+        address: 0x3D,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CELL_VOLTAGE_3 15:0 RO -> uint,
+        },
+    },
+
+    register CELL_VOLTAGE_2 {
+        address: 0x3E,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CELL_VOLTAGE_2 15:0 RO -> uint,
+        },
+    },
+
+    register CELL_VOLTAGE_1 {
+        address: 0x3F,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field CELL_VOLTAGE_1 15:0 RO -> uint,
+        },
+    },
+
+    register BTP_DISCHARGE_SET {
+        address: 0x4A,
+        reset: 150,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field BTP_DISCHARGE_SET 15:0 -> int,
+        },
+    },
+
+    register BTP_CHARGE_SET {
+        address: 0x4B,
+        reset: 175,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field BTP_CHARGE_SET 15:0 -> int,
+        },
+    },
+
+    register STATE_OF_HEALTH_SOH {
+        address: 0x4F,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field STATE_OF_HEALTH_SOH 15:0 RO -> int,
+        },
+    },
+
+    register SAFETY_ALERT {
+        address: 0x50,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field CUV 0 RO -> bool,
+            field COV 1 RO -> bool,
+            field OCC1 2 RO -> bool,
+            field OCC2 3 RO -> bool,
+            field OCD1 4 RO -> bool,
+            field OCD2 5 RO -> bool,
+            field AOCDL 7 RO -> bool,
+            field AOCCL 9 RO -> bool,
+            field ASCDL 11 RO -> bool,
+            field OTC 12 RO -> bool,
+            field OTD 13 RO -> bool,
+            field CUVC 14 RO -> bool,
+            field DCOT 15 RO -> bool,
+            field OTF 16 RO -> bool,
+            field PTO 18 RO -> bool,
+            field PTOS 19 RO -> bool,
+            field CTO 20 RO -> bool,
+            field CTOS 21 RO -> bool,
+            field OC 22 RO -> bool,
+            field CHGC 23 RO -> bool,
+            field CHGV 24 RO -> bool,
+            field PCHGC 25 RO -> bool,
+            field UTC 26 RO -> bool,
+            field UTD 27 RO -> bool,
+            field COVL 28 RO -> bool,
+            field OCDL 29 RO -> bool,
+        },
+    },
+
+    register SAFETY_STATUS {
+        address: 0x51,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field CUV 0 RO -> bool,
+            field COV 1 RO -> bool,
+            field OCC1 2 RO -> bool,
+            field OCC2 3 RO -> bool,
+            field OCD1 4 RO -> bool,
+            field OCD2 5 RO -> bool,
+            field AOCD 6 RO -> bool,
+            field AOCDL 7 RO -> bool,
+            field AOCC 8 RO -> bool,
+            field AOCCL 9 RO -> bool,
+            field ASCD 10 RO -> bool,
+            field ASCDL 11 RO -> bool,
+            field OTC 12 RO -> bool,
+            field OTD 13 RO -> bool,
+            field CUVC 14 RO -> bool,
+            field DCOT 15 RO -> bool,
+            field OTF 16 RO -> bool,
+            field HWDF 17 RO -> bool,
+            field PTO 18 RO -> bool,
+            field CTO 20 RO -> bool,
+            field OC 22 RO -> bool,
+            field CHGC 23 RO -> bool,
+            field CHGV 24 RO -> bool,
+            field PCHGC 25 RO -> bool,
+            field UTC 26 RO -> bool,
+            field UTD 27 RO -> bool,
+            field COVL 28 RO -> bool,
+            field OCDL 29 RO -> bool,
+        },
+    },
+
+    register PF_ALERT {
+        address: 0x52,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field SUV 0 RO -> bool,
+            field SOV 1 RO -> bool,
+            field SOCC 2 RO -> bool,
+            field SOCD 3 RO -> bool,
+            field SOT 4 RO -> bool,
+            field COVL 5 RO -> bool,
+            field SOTF 6 RO -> bool,
+            field QIM 7 RO -> bool,
+            field CB 8 RO -> bool,
+            field IMP 9 RO -> bool,
+            field CD 10 RO -> bool,
+            field VIMR 11 RO -> bool,
+            field VIMA 12 RO -> bool,
+            field AOCDL 13 RO -> bool,
+            field AOCCL 14 RO -> bool,
+            field ASCDL 15 RO -> bool,
+            field CFETF 16 RO -> bool,
+            field DFETF 17 RO -> bool,
+            field OCDL 18 RO -> bool,
+            field FUSE 19 RO -> bool,
+            field AFER 20 RO -> bool,
+            field AFEC 21 RO -> bool,
+            field SECOND_LVL 22 RO -> bool,
+            field TMPC 27 RO -> bool,
+            field TS1 28 RO -> bool,
+            field TS2 29 RO -> bool,
+            field TS3 30 RO -> bool,
+            field TS4 31 RO -> bool,
+        },
+    },
+
+    register PF_STATUS {
+        address: 0x53,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field SUV 0 RO -> bool,
+            field SOV 1 RO -> bool,
+            field SOCC 2 RO -> bool,
+            field SOCD 3 RO -> bool,
+            field SOT 4 RO -> bool,
+            field COVL 5 RO -> bool,
+            field SOTF 6 RO -> bool,
+            field QIM 7 RO -> bool,
+            field CB 8 RO -> bool,
+            field IMP 9 RO -> bool,
+            field CD 10 RO -> bool,
+            field VIMR 11 RO -> bool,
+            field VIMA 12 RO -> bool,
+            field AOCDL 13 RO -> bool,
+            field AOCCL 14 RO -> bool,
+            field ASCDL 15 RO -> bool,
+            field CFETF 16 RO -> bool,
+            field DFETF 17 RO -> bool,
+            field OCDL 18 RO -> bool,
+            field FUSE 19 RO -> bool,
+            field AFER 20 RO -> bool,
+            field AFEC 21 RO -> bool,
+            field SECOND_LVL 22 RO -> bool,
+            field NTC 23 RO -> bool,
+            field FORCE 25 RO -> bool,
+            field DFW 26 RO -> bool,
+            field TMPC 27 RO -> bool,
+            field TS1 28 RO -> bool,
+            field TS2 29 RO -> bool,
+            field TS3 30 RO -> bool,
+            field TS4 31 RO -> bool,
+        },
+    },
+
+    register OPERATION_STATUS {
+        address: 0x54,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field PRES 0 RO -> bool,
+            field DSG 1 RO -> bool,
+            field CHG 2 RO -> bool,
+            field PCHG 3 RO -> bool,
+            field ACTHR 4 RO -> bool,
+            field FUSE 5 RO -> bool,
+            field EMSHUT 6 RO -> bool,
+            field BTP_INT 7 RO -> bool,
+            field SEC 9:8 RO -> uint as enum SecurityMode {
+                Reserved: 0,
+                FullAccess: 1,
+                UnSealed: 2,
+                Sealed: 3,
+            },
+            field SDV 10 RO -> bool,
+            field SS 11 RO -> bool,
+            field PF 12 RO -> bool,
+            field XDSG 13 RO -> bool,
+            field XCHG 14 RO -> bool,
+            field SLEEP 15 RO -> bool,
+            field SDM 16 RO -> bool,
+            field LED 17 RO -> bool,
+            field AUTH 18 RO -> bool,
+            field AUTOCALM 19 RO -> bool,
+            field CAL 20 RO -> bool,
+            field CAL_OFFSET 21 RO -> bool,
+            field XL 22 RO -> bool,
+            field SLEEPM 23 RO -> bool,
+            field INIT 24 RO -> bool,
+            field SMBLCAL 25 RO -> bool,
+            field STORAGEM 26 RO -> bool,
+            field CB 28 RO -> bool,
+            field DISCONN 29 RO -> bool,
+            field PSSHUT 30 RO -> bool,
+            field IOSHUT 31 RO -> bool,
+        },
+    },
+
+    register CHARGING_STATUS {
+        address: 0x55,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 5,
+
+            field UT 0 RO -> bool,
+            field LT 1 RO -> bool,
+            field STL 2 RO -> bool,
+            field RT 3 RO -> bool,
+            field STH 4 RO -> bool,
+            field HT 5 RO -> bool,
+            field OT 6 RO -> bool,
+            field PV 8 RO -> bool,
+            field LV 9 RO -> bool,
+            field MV 10 RO -> bool,
+            field HV 11 RO -> bool,
+            field CHG_IN 12 RO -> bool,
+            field CHG_SU 13 RO -> bool,
+            field MCHG 14 RO -> bool,
+            field VCT 15 RO -> bool,
+            field CCR 16 RO -> bool,
+            field CVR 17 RO -> bool,
+            field CCC 18 RO -> bool,
+            field NCT 19 RO -> bool,
+            field ERM 20 RO -> bool,
+            field ERETM 21 RO -> bool,
+            field DEG 23:22 RO -> uint as DegradationMode,
+            field V_PV 24 RO -> bool,
+            field V_LV 25 RO -> bool,
+            field V_MV 26 RO -> bool,
+            field V_HV 27 RO -> bool,
+            field V_IN 28 RO -> bool,
+            field V_SU 29 RO -> bool,
+            field V_MCHG 30 RO -> bool,
+            field V_VCT 31 RO -> bool,
+            field SOC_PV 32 RO -> bool,
+            field SOC_LV 33 RO -> bool,
+            field SOC_MV 34 RO -> bool,
+            field SOC_HV 35 RO -> bool,
+            field SOC_IN 36 RO -> bool,
+            field SOC_SU 37 RO -> bool,
+            field SOC_MCHG 38 RO -> bool,
+            field SOC_VCT 39 RO -> bool,
+        },
+    },
+
+    register GAUGING_STATUS {
+        address: 0x56,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field FD 0 RO -> bool,
+            field FC 1 RO -> bool,
+            field TD 2 RO -> bool,
+            field TC 3 RO -> bool,
+            field BAL_EN 4 RO -> bool,
+            field EDV 5 RO -> bool,
+            field DSG 6 RO -> bool,
+            field CF 7 RO -> bool,
+            field REST 8 RO -> bool,
+            field R_DIS 10 RO -> bool,
+            field VOK 11 RO -> bool,
+            field QEN 12 RO -> bool,
+            field SLPQMAX 13 RO -> bool,
+            field OCVPRED 14 RO -> bool,
+            field NSFM 15 RO -> bool,
+            field VDQ 16 RO -> bool,
+            field QMAX 17 RO -> bool,
+            field RX 18 RO -> bool,
+            field LDMD 19 RO -> bool,
+            field OCVFR 20 RO -> bool,
+            field VLB 21 RO -> bool,
+            field PERF_MODE 24 RO -> bool,
+        },
+    },
+
+    register MANUFACTURING_STATUS {
+        address: 0x57,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field PCHG_EN 0 RO -> bool,
+            field CHG_EN 1 RO -> bool,
+            field DSG_EN 2 RO -> bool,
+            field GAUGE_EN 3 RO -> bool,
+            field FET_EN 4 RO -> bool,
+            field LF_EN 5 RO -> bool,
+            field PF_EN 6 RO -> bool,
+            field BBR_EN 7 RO -> bool,
+            field FUSE_EN 8 RO -> bool,
+            field LED_EN 9 RO -> bool,
+            field LT_TEST 14 RO -> bool,
+            field CAL_EN 15 RO -> bool,
+        },
+    },
+
+    register AFE_REG {
+        address: 0x58,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 21,
+
+            field AFE_INT_STATUS 7:0 RO -> uint,
+            field AFE_FET_STATUS 15:8 RO -> uint,
+            field AFE_RXIN 23:16 RO -> uint,
+            field AFE_LATCH_STATUS 31:24 RO -> uint,
+            field AFE_INT_EN 39:32 RO -> uint,
+            field AFE_CTRL 47:40 RO -> uint,
+            field AFE_RXIEN 55:48 RO -> uint,
+            field AFE_RLOUT 63:56 RO -> uint,
+            field AFE_RHOUT 71:64 RO -> uint,
+            field AFE_RHINT 79:72 RO -> uint,
+            field AFE_CELL_BALANCE 87:80 RO -> uint,
+            field AFE_ADC_CC_CTRL 95:88 RO -> uint,
+            field AFE_ADC_MUX_CTRL 103:96 RO -> uint,
+            field AFE_LED_CTRL 111:104 RO -> uint,
+            field AFE_HW_CTRL 119:112 RO -> uint,
+            field AFE_TMR_CTRL 127:120 RO -> uint,
+            field AFE_PROTECTION 135:128 RO -> uint,
+            field AFE_OCD 143:136 RO -> uint,
+            field AFE_SCC 151:144 RO -> uint,
+            field AFE_SCD1 159:152 RO -> uint,
+            field AFE_SCD2 167:160 RO -> uint,
+        },
+    },
+
+    register MAX_TURBO_POWER {
+        address: 0x59,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field MAX_TURBO_POWER 15:0 -> int,
+        },
+    },
+
+    register SUS_TURBO_POWER {
+        address: 0x5A,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field SUS_TURBO_POWER 15:0 -> int,
+        },
+    },
+
+    register TURBO_PACK_R {
+        address: 0x5B,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field TURBO_PACK_R 15:0 -> int,
+        },
+    },
+
+    register TURBO_SYS_R {
+        address: 0x5C,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field TURBO_SYS_R 15:0 -> int,
+        },
+    },
+
+    register TURBO_EDV {
+        address: 0x5D,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field TURBO_EDV 15:0 -> int,
+        },
+    },
+
+    register TURBO_CURRENT {
+        address: 0x5E,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field TURBO_CURRENT 15:0 -> int,
+        },
+    },
+
+    register SUS_TURBO_CURRENT {
+        address: 0x5F,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field SUS_TURBO_CURRENT 15:0 -> int,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_1 {
+        address: 0x60,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 26,
+
+            field CELL_1_MAX_V 15:0 RO -> uint,
+            field CELL_2_MAX_V 31:16 RO -> uint,
+            field CELL_3_MAX_V 47:32 RO -> uint,
+            field CELL_4_MAX_V 63:48 RO -> uint,
+            field CELL_1_MIN_V 79:64 RO -> uint,
+            field CELL_2_MIN_V 95:80 RO -> uint,
+            field CELL_3_MIN_V 111:96 RO -> uint,
+            field CELL_4_MIN_V 127:112 RO -> uint,
+            field MAX_DELTA_CELL_V 143:128 RO -> uint,
+            field MAX_CHARGE_A 159:144 RO -> uint,
+            field MAX_DISCHARGE_A 175:160 RO -> uint,
+            field MAX_AVG_DISCHARGE_A 191:176 RO -> uint,
+            field MAX_AVG_DISCHARGE_PWR 207:192 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_2 {
+        address: 0x61,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 20,
+
+            field MIN_FCC_SOH_MAH 15:0 RO -> uint,
+            field MIN_FCC_SOH_CWH 31:16 RO -> uint,
+            field CB_TIME_CELL_1 63:32 RO -> uint,
+            field CB_TIME_CELL_2 95:64 RO -> uint,
+            field CB_TIME_CELL_3 127:96 RO -> uint,
+            field CB_TIME_CELL_4 159:128 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_3 {
+        address: 0x62,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field TOTAL_FW_RUNTIME 31:0 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_4 {
+        address: 0x63,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field NUM_COV_EVENTS 15:0 RO -> uint,
+            field LAST_COV_EVENT 31:16 RO -> uint,
+            field NUM_CUV_EVENTS 47:32 RO -> uint,
+            field LAST_CUV_EVENT 63:48 RO -> uint,
+            field NUM_OCD1_EVENT 79:64 RO -> uint,
+            field LAST_OCD1_EVENT 95:80 RO -> uint,
+            field NUM_OCD2_EVENTS 111:96 RO -> uint,
+            field LAST_OCD2_EVENT 127:112 RO -> uint,
+            field NUM_OCC1_EVENTS 143:128 RO -> uint,
+            field LAST_OCC1_EVENT 159:144 RO -> uint,
+            field NUM_OCC2_EVENTS 175:160 RO -> uint,
+            field LAST_OCC2_EVENT 191:176 RO -> uint,
+            field NUM_AOLD_EVENTS 207:192 RO -> uint,
+            field LAST_AOLD_EVENT 223:208 RO -> uint,
+            field NUM_ASCD_EVENTS 239:224 RO -> uint,
+            field LAST_ASCD_EVENT 255:240 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_5 {
+        address: 0x64,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field NUM_ASCC_EVENTS 15:0 RO -> uint,
+            field LAST_ASCC_EVENT 31:16 RO -> uint,
+            field NUM_OTC_EVENTS 47:32 RO -> uint,
+            field LAST_OTC_EVENT 63:48 RO -> uint,
+            field NUM_OTD_EVENT 79:64 RO -> uint,
+            field LAST_OTD_EVENT 95:80 RO -> uint,
+            field NUM_OTF_EVENTS 111:96 RO -> uint,
+            field LAST_OTF_EVENT 127:112 RO -> uint,
+            field NUM_VALID_CHG_TERM 143:128 RO -> uint,
+            field LAST_VALID_CHG_TERM 159:144 RO -> uint,
+            field NUM_QMAX_UPDATES 175:160 RO -> uint,
+            field LAST_QMAX_UPDATE 191:176 RO -> uint,
+            field NUM_RA_UPDATES 207:192 RO -> uint,
+            field LAST_RA_UPDATE 223:208 RO -> uint,
+            field NUM_RA_DISABLE 239:224 RO -> uint,
+            field LAST_RA_DISABLE 255:240 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_6 {
+        address: 0x65,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field TIME_SPENT_UT_RSOC_A 31:0 RO -> uint,
+            field TIME_SPENT_UT_RSOC_B 63:32 RO -> uint,
+            field TIME_SPENT_UT_RSOC_C 95:64 RO -> uint,
+            field TIME_SPENT_UT_RSOC_D 127:96 RO -> uint,
+            field TIME_SPENT_UT_RSOC_E 159:128 RO -> uint,
+            field TIME_SPENT_UT_RSOC_F 191:160 RO -> uint,
+            field TIME_SPENT_UT_RSOC_G 223:192 RO -> uint,
+            field TIME_SPENT_UT_RSOC_H 255:224 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_7 {
+        address: 0x66,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field TIME_SPENT_LT_RSOC_A 31:0 RO -> uint,
+            field TIME_SPENT_LT_RSOC_B 63:32 RO -> uint,
+            field TIME_SPENT_LT_RSOC_C 95:64 RO -> uint,
+            field TIME_SPENT_LT_RSOC_D 127:96 RO -> uint,
+            field TIME_SPENT_LT_RSOC_E 159:128 RO -> uint,
+            field TIME_SPENT_LT_RSOC_F 191:160 RO -> uint,
+            field TIME_SPENT_LT_RSOC_G 223:192 RO -> uint,
+            field TIME_SPENT_LT_RSOC_H 255:224 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_8 {
+        address: 0x67,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field TIME_SPENT_STL_RSOC_A 31:0 RO -> uint,
+            field TIME_SPENT_STL_RSOC_B 63:32 RO -> uint,
+            field TIME_SPENT_STL_RSOC_C 95:64 RO -> uint,
+            field TIME_SPENT_STL_RSOC_D 127:96 RO -> uint,
+            field TIME_SPENT_STL_RSOC_E 159:128 RO -> uint,
+            field TIME_SPENT_STL_RSOC_F 191:160 RO -> uint,
+            field TIME_SPENT_STL_RSOC_G 223:192 RO -> uint,
+            field TIME_SPENT_STL_RSOC_H 255:224 RO -> uint,
+        },
+    },
+
+    register TURBO_RHF_EFFECTIVE {
+        address: 0x68,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field TURBO_RHF_EFFECTIVE 15:0 RO -> int,
+        },
+    },
+
+    register TURBO_VLOAD {
+        address: 0x69,
+        reset: 0,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 2,
+
+            field TURBO_VLOAD 15:0 RO -> int,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_11 {
+        address: 0x6A,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field TIME_SPENT_HT_RSOC_A 31:0 RO -> uint,
+            field TIME_SPENT_HT_RSOC_B 63:32 RO -> uint,
+            field TIME_SPENT_HT_RSOC_C 95:64 RO -> uint,
+            field TIME_SPENT_HT_RSOC_D 127:96 RO -> uint,
+            field TIME_SPENT_HT_RSOC_E 159:128 RO -> uint,
+            field TIME_SPENT_HT_RSOC_F 191:160 RO -> uint,
+            field TIME_SPENT_HT_RSOC_G 223:192 RO -> uint,
+            field TIME_SPENT_HT_RSOC_H 255:224 RO -> uint,
+        },
+    },
+
+    register LIFETIME_DATA_BLOCK_12 {
+        address: 0x6B,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field TIME_SPENT_OT_RSOC_A 31:0 RO -> uint,
+            field TIME_SPENT_OT_RSOC_B 63:32 RO -> uint,
+            field TIME_SPENT_OT_RSOC_C 95:64 RO -> uint,
+            field TIME_SPENT_OT_RSOC_D 127:96 RO -> uint,
+            field TIME_SPENT_OT_RSOC_E 159:128 RO -> uint,
+            field TIME_SPENT_OT_RSOC_F 191:160 RO -> uint,
+            field TIME_SPENT_OT_RSOC_G 223:192 RO -> uint,
+            field TIME_SPENT_OT_RSOC_H 255:224 RO -> uint,
+        },
+    },
+
+    register DA_STATUS_1 {
+        address: 0x71,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field CELL_VOLTAGE_1 15:0 RO -> uint,
+            field CELL_VOLTAGE_2 31:16 RO -> uint,
+            field CELL_VOLTAGE_3 47:32 RO -> uint,
+            field CELL_VOLTAGE_4 63:48 RO -> uint,
+            field BAT_VOLTAGE 79:64 RO -> uint,
+            field PACK_VOLTAGE 95:80 RO -> uint,
+            field CELL_CURRENT_1 111:96 RO -> uint,
+            field CELL_CURRENT_2 127:112 RO -> uint,
+            field CELL_CURRENT_3 143:128 RO -> uint,
+            field CELL_CURRENT_4 159:144 RO -> uint,
+            field CELL_PWR_1 175:160 RO -> uint,
+            field CELL_PWR_2 191:176 RO -> uint,
+            field CELL_PWR_3 207:192 RO -> uint,
+            field CELL_PWR_4 223:208 RO -> uint,
+            field TOTAL_PWR 239:224 RO -> uint,
+            field AVG_PWR 255:240 RO -> uint,
+        },
+    },
+
+    register DA_STATUS_2 {
+        address: 0x72,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 26,
+
+            field INT_TEMP 15:0 RO -> uint,
+            field TS1_TEMP 31:16 RO -> uint,
+            field TS2_TEMP 47:32 RO -> uint,
+            field TS3_TEMP 63:48 RO -> uint,
+            field TS4_TEMP 79:64 RO -> uint,
+            field CELL_TEMP 95:80 RO -> uint,
+            field FET_TEMP 111:96 RO -> uint,
+            field GAUGING_TEMP 127:112 RO -> uint,
+            field USER_TEMP 143:128 RO -> uint,
+            field UNCOMP_CELL_V_1 159:144 RO -> uint,
+            field UNCOMP_CELL_V_2 175:160 RO -> uint,
+            field UNCOMP_CELL_V_3 191:176 RO -> uint,
+            field UNCOMP_CELL_V_4 207:192 RO -> uint,
+        },
+    },
+
+    register GAUGE_STATUS_1 {
+        address: 0x73,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field TRUE_REM_Q 15:0 RO -> uint,
+            field TRUE_REM_E 31:16 RO -> uint,
+            field INITIAL_Q 47:32 RO -> uint,
+            field INITIAL_E 63:48 RO -> uint,
+            field TRUE_FCC_Q 79:64 RO -> uint,
+            field TRUE_FCC_E 95:80 RO -> uint,
+            field T_SIM 111:96 RO -> uint,
+            field T_AMBIENT 127:112 RO -> uint,
+            field RA_SCALE_0 143:128 RO -> uint,
+            field RA_SCALE_1 159:144 RO -> uint,
+            field RA_SCALE_2 175:160 RO -> uint,
+            field RA_SCALE_3 191:176 RO -> uint,
+            field COMP_RES_0 207:192 RO -> uint,
+            field COMP_RES_1 223:208 RO -> uint,
+            field COMP_RES_2 239:224 RO -> uint,
+            field COMP_RES_3 255:240 RO -> uint,
+        },
+    },
+
+    register GAUGE_STATUS_2 {
+        address: 0x74,
+        fields: fieldset _ {
+            size-bytes: 32,
+
+            field PACK_GRID 7:0 RO -> uint,
+            field Q_MAX_STATUS 9:8 RO -> uint as enum QMaxStatus {
+                BattOK: 0,
+                QMaxUpdated: 1,
+                QMaxRTableUpdated: 2,
+                Reserved: 3,
+            },
+            field ITEN 10 RO -> bool,
+            field QMAX_FIELD_UPDATED 11 RO -> bool,
+            field CELL_GRID_0 23:16 RO -> uint,
+            field CELL_GRID_1 31:24 RO -> uint,
+            field CELL_GRID_2 39:32 RO -> uint,
+            field CELL_GRID_3 47:40 RO -> uint,
+            field STATE_TIME 79:48 RO -> uint,
+            field DOD0_0 95:80 -> uint,
+            field DOD0_1 111:96 RO -> uint,
+            field DOD0_2 127:112 RO -> uint,
+            field DOD0_3 143:128 RO -> uint,
+            field DOD0_PASSED_Q 159:144 RO -> uint,
+            field DOD0_PASSED_E 175:160 RO -> uint,
+            field DOD0_TIME 191:176 RO -> uint,
+            field DODEOC_0 207:192 RO -> uint,
+            field DODEOC_1 223:208 RO -> uint,
+            field DODEOC_2 239:224 RO -> uint,
+            field DODEOC_3 255:240 RO -> uint,
+        },
+    },
+
+    register GAUGE_STATUS_3 {
+        address: 0x75,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 24,
+
+            field QMAX_0 15:0 RO -> uint,
+            field QMAX_1 31:16 RO -> uint,
+            field QMAX_2 47:32 RO -> uint,
+            field QMAX_3 63:48 RO -> uint,
+            field QMAX_DOD0_0 79:64 RO -> uint,
+            field QMAX_DOD0_1 95:80 RO -> uint,
+            field QMAX_DOD0_2 111:96 RO -> uint,
+            field QMAX_DOD0_3 127:112 RO -> uint,
+            field QMAX_PASSED_Q 143:128 RO -> uint,
+            field QMAX_TIME 159:144 RO -> uint,
+            field TEMP_K_FACTOR 175:160 RO -> uint,
+            field TEMP_A_FACTOR 191:176 RO -> uint,
+        },
+    },
+
+    register CB_STATUS {
+        address: 0x76,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 19,
+
+            field CB_TIME_0 15:0 RO -> uint,
+            field CB_TIME_1 31:16 RO -> uint,
+            field CB_TIME_2 47:32 RO -> uint,
+            field CB_TIME_3 63:48 RO -> uint,
+            field CELL_1_BALANCE_DOD 79:64 RO -> uint,
+            field CELL_2_BALANCE_DOD 95:80 RO -> uint,
+            field CELL_3_BALANCE_DOD 111:96 RO -> uint,
+            field CELL_4_BALANCE_DOD 127:112 RO -> uint,
+            field TOTAL_DOD_CHRG 143:128 RO -> uint,
+            field CELL_BALANCE_STAT 151:144 RO -> uint,
+        },
+    },
+
+    register STATE_OF_HEALTH {
+        address: 0x77,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 4,
+
+            field SOH_FCC 15:0 RO -> uint,
+            field SOH_ENERGY 31:16 RO -> uint,
+        },
+    },
+
+    register FILTER_CAPACITY {
+        address: 0x78,
+        access: RO,
+        fields: fieldset _ {
+            size-bytes: 8,
+
+            field FILT_REM_CAP 15:0 RO -> uint,
+            field FILT_REM_ENERGY 31:16 RO -> uint,
+            field FILT_FULL_CHG_CAP 47:32 RO -> uint,
+            field FILT_FULL_CHG_ENERGY 63:48 RO -> uint,
+        },
+    },
+}
