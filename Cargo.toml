@@ -1,9 +1,14 @@
 [package]
 name = "bq41z50"
 version = "0.1.0"
+description = "Platform-agnostic async Rust driver for the Texas Instruments BQ41Z50 battery fuel gauge."
 edition = "2024"
 license = "MIT"
 repository = "https://github.com/OpenDevicePartnership/bq41z50"
+documentation = "https://docs.rs/bq41z50"
+readme = "README.md"
+keywords = ["battery", "fuel-gauge", "i2c", "embedded-hal", "driver"]
+categories = ["embedded", "hardware-support", "no-std", "asynchronous"]
 rust-version = "1.94"
 
 [dependencies]
