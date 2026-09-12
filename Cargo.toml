@@ -1,19 +1,26 @@
 [package]
-name = "embedded-rust-template"
+name = "bq41z50"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 license = "MIT"
-repository = "https://github.com/OpenDevicePartnership/embedded-rust-template"
-rust-version = "1.85"
+repository = "https://github.com/OpenDevicePartnership/bq41z50"
+rust-version = "1.94"
 
 [dependencies]
-# dependencies for all targets
-
-[target.'cfg(target_os = "none")'.dependencies]
-# dependencies for no-std targets
+device-driver = "2.1.0"
+embedded-batteries-async = "0.3.4"
+embedded-hal-async = "1.0.0"
 
 [lints.clippy]
-suspicious = "forbid"
-correctness = "forbid"
-perf = "forbid"
-style = "forbid"
+suspicious = "deny"
+correctness = "deny"
+perf = "deny"
+style = "deny"
+
+[features]
+defmt-03 = []
+
+[dev-dependencies]
+tokio = { version = "1.50.0", features = ["full"] }
+embedded-hal-mock = { version = "0.11.1", features = ["embedded-hal-async"] }
+pico-de-gallo-hal = "0.7.0"
